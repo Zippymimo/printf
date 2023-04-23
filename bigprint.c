@@ -1,99 +1,36 @@
 #include "main.h"
-#include <stdarg.h>
-#include <stdio.h>
-#include <stdlib.h>
 
 /**
- * print_number - prints an integer recursively
- * @n: the integer to print
- * @f: the format string
- * @len: pointer to length variable
- */
-void print_number(int n, const char *f, int *len)
-{
-    if (n < 0)
-    {
-        _putchar('-');
-        *len += 1;
-        print_number(-n, f, len);
-    }
-    else if (n >= 10)
-    {
-        print_number(n / 10, f, len);
-        _putchar((n % 10) + '0');
-        *len += 1;
-    }
-    else
-    {
-        _putchar(n + '0');
-        *len += 1;
-    }
-    (void)f;
-}
-
-/**
- * print_unsigned - prints an unsigned integer recursively
- * @n: the unsigned integer to print
- * @f: the format string
- * @len: pointer to length variable
- */
-void print_unsigned(unsigned int n, const char *f, int *len)
-{
-    if (n >= 10)
-    {
-        print_unsigned(n / 10, f, len);
-        _putchar((n % 10) + '0');
-        *len += 1;
-    }
-    else
-    {
-        _putchar(n + '0');
-        *len += 1;
-    }
-    (void)f;
-}
-
-/**
- * _printf - prints output according to a format
- * @format: the format string
+ * get_width - Calculates the width for printing
+ * @format: Formatted string in which to print the arguments.
+ * @i: List of arguments to be printed.
+ * @list: list of arguments.
  *
- * Return: the number of characters printed (excluding the null byte used
- * to end output to strings)
+ * Return: width.
  */
-int _printf(const char *format, ...)
+int get_width(const char *format, int *i, va_list list)
 {
-    int i, len = 0;
-    char *s;
-    va_list arg;
-    int plus_flag, space_flag, hash_flag;
+	int curr_i;
+	int width = 0;
 
-    va_start(arg, format);
+	for (curr_i = *i + 1; format[curr_i] != '\0'; curr_i++)
+	{
+		if (is_digit(format[curr_i]))
+		{
+			width *= 10;
+			width += format[curr_i] - '0';
+		}
+		else if (format[curr_i] == '*')
+		{
+			curr_i++;
+			width = va_arg(list, int);
+			break;
+		}
+		else
+			break;
+	}
 
-    for (i = 0; format[i] != '\0'; i++)
-    {
-        if (format[i] == '%')
-        {
-            plus_flag = 0;
-            space_flag = 0;
-            hash_flag = 0;
-            i++;
+	*i = curr_i - 1;
 
-            while (format[i] == '+' || format[i] == ' ' || format[i] == '#')
-            {
-                if (format[i] == '+')
-                    plus_flag = 1;
-                else if (format[i] == ' ')
-                    space_flag = 1;
-                else if (format[i] == '#')
-                    hash_flag = 1;
-                i++;
-            }
-
-            if (format[i] == 'c')
-            {
-                _putchar(va_arg(arg, int));
-                len += 1;
-            }
-            else if (format[i] == 's')
-            {
+	return (width);
 }
