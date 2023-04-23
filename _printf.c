@@ -3,10 +3,18 @@
 void print_buffer(char buffer[], int *buff_ind);
 
 /**
+<<<<<<< HEAD
  * _printf - Printf function
  * @format: format.
  * Return: Printed chars.
+=======
+ * _printf - Prints output according to a format.
+ * @format: A character string containing zero or more directives.
+ *
+ * Return: The number of characters printed.
+>>>>>>> 6a34b8429c9dc7476b2ac6a745bdd171bf509c2f
  */
+
 int _printf(const char *format, ...)
 {
 	int i, printed = 0, printed_chars = 0;
